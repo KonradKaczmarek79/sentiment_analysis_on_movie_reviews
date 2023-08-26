@@ -6,7 +6,8 @@ PATTERNS = {
             'html_tags': re.compile(r'<[^>]+>'),
             'email_addr': re.compile(r"\S*@\S*\s?"),
             'http_addr': re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'),
-            'obscene_words': ('shit', 'dick',  'bullshit')
+            'obscene_words': ('shit', 'dick',  'bullshit'),
+            'digits_in_substr': re.compile(r"\b\S*[0-9]+\S*\s?\b")
             }
 
 def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
