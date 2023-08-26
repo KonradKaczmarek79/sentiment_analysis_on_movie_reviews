@@ -1,8 +1,12 @@
 import re
 from collections import Counter
+import string
 
 PATTERNS = {
-                'html_tags': re.compile(r'<[^>]+>'),
+            'html_tags': re.compile(r'<[^>]+>'),
+            'email_addr': re.compile(r"\S*@\S*\s?"),
+            'http_addr': re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'),
+            'obscene_words': ('shit', 'dick',  'bullshit')
             }
 
 def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
@@ -62,6 +66,59 @@ def clear_substr_in_texts(dataset: list, pattern=PATTERNS['html_tags'], replace_
     :param pattern: pattern to search
     :return: list of strings (if the list of bytes is passed they are converted to strings)
     """
+    # show what data will be removed
+    print("\nREMOVED SUBSTRINGS:\n", get_occurance_in_dataset(dataset, pattern))
+
     return [re.sub(pattern, replace_with,
                    txt.decode('utf-8') if isinstance(txt, bytes) else txt)
             for txt in dataset]
+
+def clear_punctuation(text: str, replace_with: str|None=None):
+    """
+    this function uses a well-known way to remove punctutation characters
+    :param replace_with:
+    :param text: text data to apply the replacement punctuation sign into None
+    :return: string with punctuation signs replaced with 'replace_with' value
+    """
+    # create table where key will be punctuation signs and vals will be Nones
+    table = str.maketrans({key: replace_with for key in string.punctuation})
+    # clear all punctuation signs from whole text
+    return text.translate(table)
+
+
+def corpus_docs_word_frequency(corpus: list, words_to_check: str | list):
+    """
+    Function returns info about each word from corpus occurrence in whole corpus and how many documents contain this word
+    :param corpus: list of documents
+    :param words_to_check:
+    :return: None (displays info about each word occurrence)
+    """
+    all_documents = ' '.join(corpus).lower()
+    all_documents_cleaned = clear_punctuation(all_documents)
+
+    words = all_documents.split()
+    # word_counts_ = Counter(words)
+
+    if isinstance(words_to_check, str):
+        words_to_check = [words_to_check]
+
+    for w in words_to_check:
+
+        # total_frequency_ = word_counts[w]
+
+        doc_frequency = sum(1 for doc in corpus if w in doc.lower())
+
+        # w_cleared = clear_punctuation(w)
+
+        matches = re.findall(re.compile(r"{}".format(w)), all_documents)
+
+        total_frequency = len(matches)
+
+        if doc_frequency > total_frequency:
+            total_frequency = doc_frequency
+
+        if w in PATTERNS['obscene_words']:
+            w = f'{w[:2]}#@%#'
+
+        print(f"Word '{w}' occurs {total_frequency} times in the corpus.")
+        print(f"Word '{w}' occurs in {doc_frequency} documents.\n")
