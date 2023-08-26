@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 
 def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
     """
@@ -18,3 +19,5 @@ def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=
     reviews_train_without_unsup = [list_of_texts[x] for x in pos_neg_indexes]
 
     return reviews_train_without_unsup, labels_without_unsup
+
+
