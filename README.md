@@ -2,7 +2,9 @@
 final project - "Data Science PRO" Bootcamp in Kodołamacz/Sages (https://www.kodolamacz.pl/)
 
 ## Introduction
-The aim of this project is to compare different approaches to working with text data in the case of sentiment analysis topic. In the following steps, various actions were carried out on the base texts regarding movie reviews, to bring this text data (documents) to a form from which machine learning algorithms can extract information about the sentiment groups of these documents.
+The aim of this project is to compare different approaches to working with text data in the case of sentiment analysis topic. In the following steps, various actions were carried out on the movie review documents contents, to bring this text data to a form from which machine learning algorithms can extract information about "sentiment" groups of these documents.
+
+The analysis of sentiment (positive vs. negative) was performed on a large dataset described briefly in the **Dataset** section.
 
 ## Dataset
 **Large Movie Review Dataset** (https://ai.stanford.edu/~amaas/data/sentiment/)
@@ -12,3 +14,26 @@ The dataset contains 50,000 movie reviews for binary sentiment classification (2
 ## Requirements and libraries’ versions
 - all requirements (additional installs needed to run the coda) are contained in the file: `requirements.txt`
 - all versions of modules, libraries, and things like that are listed in jupyter notebook: `suppprted_modules/proj_info.ipynb`
+
+## The structure of this repository
+
+### Feature engineering
+The first part deals with the steps needed before movie review data can be used for machine learning. 
+There are a lot of various techniques but some of them can be useful for certain problem only. 
+While working on the project, I tried to choose the most appropriate for the problem of sentiment analysis in reviews.
+
+#### Text data preprocessing part 1
+This stage concerns the preparation of data, regardless of what model and type of text division into tokens and vectors will be used. 
+It is about removing the noise that is caused by data that does not carry information about feelings, emotions, etc.
+
+The activities carried out at this stage include:
+
+-	Checking and removing the data similar to HTML tags
+-	Converting all letters to lowercase
+-	Remove HTTP addresses
+-	Email addresses and censored words removal
+-	Deleting the digits from text
+
+
+***Next steps will be added soon. 
+The project is currently under construction…***

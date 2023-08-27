@@ -7,7 +7,7 @@ PATTERNS = {
             'email_addr': re.compile(r"\S*@\S*\s?"),
             'http_addr': re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'),
             'obscene_words': ('shit', 'dick',  'bullshit'),
-            'digits_in_substr': re.compile(r"\b\S*[0-9]+\S*\s?\b")
+            'digits': re.compile(r"\d+")
             }
 
 def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
@@ -59,16 +59,23 @@ def get_occurance_in_dataset(dataset: list, pattern=PATTERNS['html_tags']) -> se
     return set(list_of_tags)
 
 
-def clear_substr_in_texts(dataset: list, pattern=PATTERNS['html_tags'], replace_with: str = "") -> list:
+def clear_substr_in_texts(dataset: list, pattern=PATTERNS['html_tags'],
+                          replace_with: str = "", sample:int=None) -> list:
     """
     Removes indicated pattern in text elements
+    :param sample: how many info about removed items you want to display if None all such items will be displayed
     :param replace_with: string that should be applied for replacement
     :param dataset: list of strings or bytes
     :param pattern: pattern to search
     :return: list of strings (if the list of bytes is passed they are converted to strings)
     """
+
+    removed_sample = get_occurance_in_dataset(dataset, pattern)
+    if sample:
+        removed_sample = list(removed_sample)[:sample]
+
     # show what data will be removed
-    print("\nREMOVED SUBSTRINGS:\n", get_occurance_in_dataset(dataset, pattern))
+    print("\nREMOVED SUBSTRINGS SAMPLE:\n", removed_sample)
 
     return [re.sub(pattern, replace_with,
                    txt.decode('utf-8') if isinstance(txt, bytes) else txt)
