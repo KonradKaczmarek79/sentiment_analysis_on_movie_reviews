@@ -3,12 +3,14 @@ from collections import Counter
 import string
 
 PATTERNS = {
-            'html_tags': re.compile(r'<[^>]+>'),
-            'email_addr': re.compile(r"\S*@\S*\s?"),
-            'http_addr': re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'),
-            'obscene_words': ('shit', 'dick',  'bullshit'),
-            'digits': re.compile(r"\d+")
-            }
+    'html_tags': re.compile(r'<[^>]+>'),
+    # 'email_addr': re.compile(r"\S*@\S*\s?"),
+    'email_addr': re.compile(r'\S*@\S*(?=[\s.!?,]|$)'),
+    'http_addr': re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'),
+    'obscene_words': ('shit', 'dick', 'bullshit'),
+    'digits': re.compile(r"\d+")
+}
+
 
 def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
     """
@@ -32,7 +34,7 @@ def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=
 
 def get_occurance_in_text(text_data: str, pattern=PATTERNS['html_tags']) -> set:
     """
-    Returns a list of elements that match the passed pattern
+    Returns a set of elements that match the passed pattern. This is a set because of elimination redundant occurrences.
     :param text_data: text data to search in
     :param pattern: regex pattern
     :return: set of elements found in passed text
@@ -60,28 +62,31 @@ def get_occurance_in_dataset(dataset: list, pattern=PATTERNS['html_tags']) -> se
 
 
 def clear_substr_in_texts(dataset: list, pattern=PATTERNS['html_tags'],
-                          replace_with: str = "", sample:int=None) -> list:
+                          replace_with: str = "", sample: int = None, get_info: bool = True) -> list:
     """
     Removes indicated pattern in text elements
-    :param sample: how many info about removed items you want to display if None all such items will be displayed
-    :param replace_with: string that should be applied for replacement
     :param dataset: list of strings or bytes
     :param pattern: pattern to search
+    :param replace_with: string that should be applied for replacement
+    :param get_info:
+    :param sample: how many info about removed items you want to display if None all such items will be displayed
     :return: list of strings (if the list of bytes is passed they are converted to strings)
     """
 
-    removed_sample = get_occurance_in_dataset(dataset, pattern)
-    if sample:
-        removed_sample = list(removed_sample)[:sample]
+    if get_info:
+        removed_sample = get_occurance_in_dataset(dataset, pattern)
+        if sample:
+            removed_sample = list(removed_sample)[:sample]
 
-    # show what data will be removed
-    print("\nREMOVED SUBSTRINGS SAMPLE:\n", removed_sample)
+        # show what data will be removed
+        print("\nREMOVED SUBSTRINGS SAMPLE:\n", removed_sample)
 
     return [re.sub(pattern, replace_with,
                    txt.decode('utf-8') if isinstance(txt, bytes) else txt)
             for txt in dataset]
 
-def clear_punctuation(text: str, replace_with: str|None=None):
+
+def clear_punctuation(text: str, replace_with: str | None = None):
     """
     this function uses a well-known way to remove punctutation characters
     :param replace_with:
@@ -130,3 +135,29 @@ def corpus_docs_word_frequency(corpus: list, words_to_check: str | list):
 
         print(f"Word '{w}' occurs {total_frequency} times in the corpus.")
         print(f"Word '{w}' occurs in {doc_frequency} documents.\n")
+
+
+def text_data_cleanup(dataset: list | str, patterns: list = [], replace_with: str = "",
+                      sample: int = None, get_info: bool = False) -> list:
+    """
+    STANDARD STEPS if patterns == []
+    - Removing the data similar to HTML tags
+    - Converting all letters to lowercase
+    - Removing HTTP addresses
+    - Email addresses and censored words removal
+    - Deleting the digits from text
+    - Removing punctuation
+
+    :return: list of cleaned up texts
+    """
+
+    if len(patterns) == 0:
+        patterns = PATTERNS.copy()
+        del patterns['obscene_words']
+        patterns = patterns.values()
+
+    result = dataset
+    for pattern in patterns:
+        result = clear_substr_in_texts(result, pattern, replace_with, sample, get_info)
+
+    return [clear_punctuation(txt, None) for txt in result]

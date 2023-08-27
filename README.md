@@ -17,22 +17,23 @@ The dataset contains 50,000 movie reviews for binary sentiment classification (2
 
 ## The structure of this repository
 
-### Feature engineering
+### Text data preprocessing
 The first part deals with the steps needed before movie review data can be used for machine learning. 
 There are a lot of various techniques but some of them can be useful for certain problem only. 
 While working on the project, I tried to choose the most appropriate for the problem of sentiment analysis in reviews.
 
-#### Text data preprocessing part 1
+#### Text data cleanup
 This stage concerns the preparation of data, regardless of what model and type of text division into tokens and vectors will be used. 
 It is about removing the noise that is caused by data that does not carry information about feelings, emotions, etc.
 
 The activities carried out at this stage include:
 
--	Checking and removing the data similar to HTML tags
--	Converting all letters to lowercase
--	Remove HTTP addresses
--	Email addresses and censored words removal
--	Deleting the digits from text
+- Checking and removing the data similar to HTML tags
+- Converting all letters to lowercase
+- Removing HTTP addresses
+- Email addresses and censored words removal
+- Deleting the digits from text
+- Removing punctuation
 
 
 ***Next steps will be added soon. 
