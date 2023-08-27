@@ -1,6 +1,7 @@
 import re
-from collections import Counter
 import string
+import nltk
+from nltk.corpus import stopwords
 
 PATTERNS = {
     'html_tags': re.compile(r'<[^>]+>'),
@@ -161,3 +162,23 @@ def text_data_cleanup(dataset: list | str, patterns: list = [], replace_with: st
         result = clear_substr_in_texts(result, pattern, replace_with, sample, get_info)
 
     return [clear_punctuation(txt, None) for txt in result]
+
+
+def remove_stopwords(text_data: list|str, stop_words_list=None) -> list:
+    """
+    Fn gets list of string data -> Tokenizes texts and removes stop words
+    :param text_data: liost of strings or single string but it will be transformed into a list
+    :param stop_words_list: list of stopwords if None nltk stopwords list will be applied
+    :return: List of strings with removed stopwords
+    """
+    if not stop_words_list:
+        stop_words_list = stopwords.words("english")
+    stop_words_list = set(stop_words_list)
+
+    if isinstance(text_data, str):
+        text_data = [text_data]
+
+    return [
+        " ".join([word for word in nltk.word_tokenize(txt) if word not in stop_words_list])
+        for txt in text_data
+    ]

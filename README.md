@@ -35,6 +35,11 @@ The activities carried out at this stage include:
 - Deleting the digits from text
 - Removing punctuation
 
+### Normalization (in the case of negations)
+
+### Tokenization
+
+### Removing stop words
 
 ***Next steps will be added soon. 
 The project is currently under construction…***
