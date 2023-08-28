@@ -12,6 +12,19 @@ PATTERNS = {
     'digits': re.compile(r"\d+")
 }
 
+# dictionaries to replace negations
+negations_without_t = {'don': 'do not', 'ain': 'not', 'aren': 'are not', 'couldn': 'could not',
+             'didn': 'did not', 'doesn': 'does not', 'hadn': 'had not', 'hasn': 'has not',
+             'haven': 'have not', 'isn': 'is not', 'mightn': 'might not', 'mustn': 'must not',
+             'needn': 'need not', 'shan': 'shall not', 'shouldn': 'should not', 'wasn': 'was not',
+             'weren': 'were not', 'won': 'will not', 'wouldn': 'would not'}
+
+negations_with_t = {"don't": 'do not', "aren't": 'are not', "couldn't": 'could not', "didn't": 'did not',
+             "doesn't": 'does not', "hadn't": 'had not', "hasn't": 'has not', "haven't": 'have not',
+             "isn't": 'is not', "mightn't": 'might not', "mustn't": 'must not', "needn't": 'need not',
+             "shan't": 'sha not', "shouldn't": 'should not', "wasn't": 'was not', "weren't": 'were not',
+             "won't": 'wo not', "wouldn't": 'would not'}
+
 
 def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
     """
@@ -182,3 +195,22 @@ def remove_stopwords(text_data: list|str, stop_words_list=None) -> list:
         " ".join([word for word in nltk.word_tokenize(txt) if word not in stop_words_list])
         for txt in text_data
     ]
+
+
+def translate_shortcuts(dataset: list, dict_to_translate: dict):
+    """
+    fn takes list of strings and dictionary and replace the words in these strings - translates the keys
+    (words from document) to their equivalent (values in dict)
+    :param dataset: list of documents (strings)
+    :param dict_to_translate: dictionaries of base word for searching in document (key) and its translation (val)
+    :return: list of translated documents
+    """
+    pattern = r"\b(?:{})\b".format('|'.join(re.escape(word) for word in dict_to_translate.keys()))
+    print(f"Applied pattern => {pattern}")
+
+    new_dataset = [
+                    re.sub(pattern, lambda match: dict_to_translate.get(match.group(0), match.group(0)), text)
+                    for text in dataset
+                   ]
+
+    return new_dataset

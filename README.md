@@ -17,13 +17,19 @@ The dataset contains 50,000 movie reviews for binary sentiment classification (2
 
 ## The structure of this repository
 
+The main file where the implementation of individual steps is described and presented is in the jupyter notebook: `sentiment_analysis_on_movie_reviews/blob/main/Sentiment_analysis_on_movie_reviews_main.ipynb`
+
+## step 0: Loading data from dataset
+
+The dataset is described in *Dataset* section. This is an initial step before the actual data processing. 
+
 ### Text data preprocessing
 The first part deals with the steps needed before movie review data can be used for machine learning. 
 There are a lot of various techniques but some of them can be useful for certain problem only. 
 While working on the project, I tried to choose the most appropriate for the problem of sentiment analysis in reviews.
 
-#### Text data cleanup
-This stage concerns the preparation of data, regardless of what model and type of text division into tokens and vectors will be used. 
+## step 1: Text data cleanup
+This step concerns the preparation of data, regardless of what model and type of text division into tokens and vectors will be used. 
 It is about removing the noise that is caused by data that does not carry information about feelings, emotions, etc.
 
 The activities carried out at this stage include:
@@ -33,13 +39,22 @@ The activities carried out at this stage include:
 - Removing HTTP addresses
 - Email addresses and censored words removal
 - Deleting the digits from text
-- Removing punctuation
+
+## step 2: Further preprocessing of text data
+
+Further data preparation. Additional analysis revealed the need for additional actions beyond the standard making in such cases tokenization and removal of stopwords. 
+The steps listed below have been performed. 
 
 ### Normalization (in the case of negations)
 
 ### Tokenization
 
 ### Removing stop words
+
+#### Removing punctuation
+
+
+__________________________________________________________________________________
 
 ***Next steps will be added soon. 
 The project is currently under construction…***
