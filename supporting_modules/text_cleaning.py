@@ -4,12 +4,12 @@ import nltk
 from nltk.corpus import stopwords
 
 PATTERNS = {
+    'starts_like_tag': re.compile(r"<+ "),
     'html_tags': re.compile(r'<[^>]+>'),
-    # 'email_addr': re.compile(r"\S*@\S*\s?"),
     'email_addr': re.compile(r'\S*@\S*(?=[\s.!?,]|$)'),
-    'http_addr': re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'),
-    'obscene_words': ('shit', 'dick', 'bullshit'),
-    'digits': re.compile(r"\d+")
+    'http_addr': re.compile(r'(http[s]?://|www[.])(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'),
+    'digits': re.compile(r"\d+"),
+    'rude_words': ('shit', 'bullshit', 'damn')
 }
 
 # dictionaries to replace negations
@@ -25,6 +25,8 @@ negations_with_t = {"don't": 'do not', "aren't": 'are not', "couldn't": 'could n
              "shan't": 'sha not', "shouldn't": 'should not', "wasn't": 'was not', "weren't": 'were not',
              "won't": 'wo not', "wouldn't": 'would not'}
 
+# only for checking the statistics how frequently such kind of words appear in the reviews
+rude_words = ('shit', 'bullshit', 'damn')
 
 def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
     """
@@ -144,37 +146,11 @@ def corpus_docs_word_frequency(corpus: list, words_to_check: str | list):
         if doc_frequency > total_frequency:
             total_frequency = doc_frequency
 
-        if w in PATTERNS['obscene_words']:
+        if w in PATTERNS['rude_words']:
             w = f'{w[:2]}#@%#'
 
         print(f"Word '{w}' occurs {total_frequency} times in the corpus.")
         print(f"Word '{w}' occurs in {doc_frequency} documents.\n")
-
-
-def text_data_cleanup(dataset: list | str, patterns: list = [], replace_with: str = "",
-                      sample: int = None, get_info: bool = False) -> list:
-    """
-    STANDARD STEPS if patterns == []
-    - Removing the data similar to HTML tags
-    - Converting all letters to lowercase
-    - Removing HTTP addresses
-    - Email addresses and censored words removal
-    - Deleting the digits from text
-    - Removing punctuation
-
-    :return: list of cleaned up texts
-    """
-
-    if len(patterns) == 0:
-        patterns = PATTERNS.copy()
-        del patterns['obscene_words']
-        patterns = patterns.values()
-
-    result = dataset
-    for pattern in patterns:
-        result = clear_substr_in_texts(result, pattern, replace_with, sample, get_info)
-
-    return [clear_punctuation(txt, None) for txt in result]
 
 
 def remove_stopwords(text_data: list|str, stop_words_list=None) -> list:
