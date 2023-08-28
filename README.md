@@ -45,14 +45,24 @@ The activities carried out at this stage include:
 Further data preparation. Additional analysis revealed the need for additional actions beyond the standard making in such cases tokenization and removal of stopwords. 
 The steps listed below have been performed. 
 
-### Normalization (in the case of negations)
+- Normalization (in the case of negation shortcuts)
+- Tokenization
+- Removing stop words
+- Removing punctuation
 
-### Tokenization
+## step 3: Stemming and Lemmatization
 
-### Removing stop words
+Another different processing of the corpus using word unifications such as stemming and lemmatization. It was decided to compare whether a hybrid combination of both methods (first lemmatization, then stemming on the result of first opperation). 
 
-#### Removing punctuation
+- Stemming and saving the data as a pickle
+- Lemmatization and saving as a pickle
+- Saving the corpus as a pickle after both operations - lemmatization and then stemming on lemmatization result
 
+## step 4: Conversion text data into tabular form
+
+The next step after clearing the data is to transform the data into a matrix (tabular). Because the machine understands numbers rather than words, we need to bring our set of documents (corpus) to this form in these tables.
+
+The basic approach is a word or n-gram frequency matrix.
 
 __________________________________________________________________________________
 
