@@ -1,5 +1,6 @@
 import supporting_modules.text_cleaning as stc
 import nltk
+import spacy
 
 # customized nltk stopword list without negation shortcuts
 customized_stop_words = ['he', 'by', 'below', 'over', 'yourselves', 'himself', 'were', "you've", 'these', 'are',
@@ -86,5 +87,42 @@ def preprocess_corpus(corpus: list, normalize_neg: bool = True, punct: bool = Tr
         for review in corpus
     ]
 
-    return corpus
+    return [" ".join(word_list) for word_list in corpus]
 
+
+def lemm_stemm(corpus: list, stemming: bool = True, stemmer=None, lemmatization: bool = False, lemmatizer=None):
+    """
+    fn performs lemmatization or stemming process or both of them lemmatization + steming
+    :param corpus: corpus to be modified
+    :param stemming: whether stemming will be applied
+    :param stemmer: kind of stemmer (default: nltk.word_tokenize)
+    :param lemmatization: whether lemmatization will be applied
+    :param lemmatizer: kind of lemmatizer (default: spacy.load("en_core_web_sm"))
+    :return:
+    """
+    if lemmatization:
+        lemmatizer = spacy.load("en_core_web_sm") if not lemmatizer else lemmatizer
+
+        lemmatized_corpus = []
+        for text in corpus:
+            doc = lemmatizer(text)
+            # lemmatized_text = " ".join([token.lemma_ for token in doc])
+            lemmatized_text = [token.lemma_ for token in doc]
+            lemmatized_corpus.append(lemmatized_text)
+
+        corpus = lemmatized_corpus
+
+    else:
+        # else tokenize words for stemmer
+        corpus = [nltk.word_tokenize(text) for text in corpus]
+
+    if stemming:
+        stemmer = nltk.PorterStemmer() if not stemmer else stemmer
+
+        corpus = [
+                    [stemmer.stem(word) for word in text]
+                    for text in corpus
+                ]
+
+    # return corpus
+    return [" ".join(tokens) for tokens in corpus]

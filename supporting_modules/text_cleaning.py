@@ -126,14 +126,11 @@ def corpus_docs_word_frequency(corpus: list, words_to_check: str | list):
     all_documents_cleaned = clear_punctuation(all_documents)
 
     words = all_documents.split()
-    # word_counts_ = Counter(words)
 
     if isinstance(words_to_check, str):
         words_to_check = [words_to_check]
 
     for w in words_to_check:
-
-        # total_frequency_ = word_counts[w]
 
         doc_frequency = sum(1 for doc in corpus if w in doc.lower())
 
