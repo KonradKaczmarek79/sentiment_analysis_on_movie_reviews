@@ -17,13 +17,13 @@ negations_without_t = {'don': 'do not', 'ain': 'not', 'aren': 'are not', 'couldn
              'didn': 'did not', 'doesn': 'does not', 'hadn': 'had not', 'hasn': 'has not',
              'haven': 'have not', 'isn': 'is not', 'mightn': 'might not', 'mustn': 'must not',
              'needn': 'need not', 'shan': 'shall not', 'shouldn': 'should not', 'wasn': 'was not',
-             'weren': 'were not', 'won': 'will not', 'wouldn': 'would not'}
+             'weren': 'were not', 'wouldn': 'would not'}
 
 negations_with_t = {"don't": 'do not', "aren't": 'are not', "couldn't": 'could not', "didn't": 'did not',
              "doesn't": 'does not', "hadn't": 'had not', "hasn't": 'has not', "haven't": 'have not',
              "isn't": 'is not', "mightn't": 'might not', "mustn't": 'must not', "needn't": 'need not',
              "shan't": 'sha not', "shouldn't": 'should not', "wasn't": 'was not', "weren't": 'were not',
-             "won't": 'wo not', "wouldn't": 'would not'}
+             "won't": 'will not', "wouldn't": 'would not'}
 
 # only for checking the statistics how frequently such kind of words appear in the reviews
 rude_words = ('shit', 'bullshit', 'damn')
