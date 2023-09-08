@@ -18,6 +18,46 @@ customized_stop_words = ['he', 'by', 'below', 'over', 'yourselves', 'himself', '
                          "you'll", 'both', 'was']
 
 
+def clear_reviews_from_dataset(labels, list_of_texts: list, neg=0, pos=1, unsup=2, pos_neg=True):
+    """
+    Clear the data that is not needed
+    :param labels: numpy.array, list, or other bunch of data with labels (target)
+    :param list_of_texts: list of tekst data
+    :param neg: value for negative label
+    :param pos: value for positive label
+    :param unsup: value for unsupported label
+    :param pos_neg: bool value depends on if we need pos neg binary data or unlabelled data
+    :return: cleared labels and text data
+    """
+    needed_labels = [pos, neg] if pos_neg else [unsup]
+
+    pos_neg_indexes = [index for index, value in enumerate(labels[:]) if value in needed_labels]
+    labels_without_unsup = [labels[x] for x in pos_neg_indexes]
+    reviews_train_without_unsup = [list_of_texts[x] for x in pos_neg_indexes]
+
+    return reviews_train_without_unsup, labels_without_unsup
+
+
+def drop_duplicates_from_corpus(corpus_texts: list, labels: list) -> (list, list):
+    """
+    fn removes duplicated texts from the corpus and the labels on indexes associated with these texts
+    :param corpus_texts: list of documents (text data) for check
+    :param labels: list of labels connected with texts in the corpus
+    :return: list of unique texts from the passed corpus and list of labels connected with them
+    """
+    unique_texts = []
+    unique_labels = []
+    already_seen_texts = set()
+
+    for text, label in zip(corpus_texts, labels):
+        if text not in already_seen_texts:
+            unique_texts.append(text)
+            unique_labels.append(label)
+            already_seen_texts.add(text)
+
+    return unique_texts, unique_labels
+
+
 def text_data_cleanup(corpus: list | str, patterns: list = [], replace_with: str = "",
                       sample: int = 10, get_info: bool = False) -> list:
     """
