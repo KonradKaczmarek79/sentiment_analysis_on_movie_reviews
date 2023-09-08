@@ -29,7 +29,7 @@ negations_with_t = {"don't": 'do not', "aren't": 'are not', "couldn't": 'could n
 rude_words = ('shit', 'bullshit', 'damn')
 
 
-def get_occurance_in_text(text_data: str, pattern=PATTERNS['html_tags']) -> set:
+def get_occurance_in_text(text_data: str, pattern=PATTERNS['html_tags']) -> (set, int):
     """
     Returns a set of elements that match the passed pattern. This is a set because of elimination redundant occurrences.
     :param text_data: text data to search in
@@ -38,10 +38,10 @@ def get_occurance_in_text(text_data: str, pattern=PATTERNS['html_tags']) -> set:
     """
     tags = pattern.findall(text_data)
 
-    return set(tags)
+    return set(tags), len(tags)
 
 
-def get_occurance_in_dataset(dataset: list, pattern=PATTERNS['html_tags']) -> set:
+def get_occurance_in_dataset(dataset: list, pattern=PATTERNS['html_tags']) -> (set, int):
     """
     Returns list of elements that match to the pattern
     :param pattern: regex pattern
@@ -49,13 +49,16 @@ def get_occurance_in_dataset(dataset: list, pattern=PATTERNS['html_tags']) -> se
     :return: set of elements found in passed texts
     """
     list_of_tags = []
+    number_of_removed = 0
 
     for x in dataset:
         if isinstance(x, bytes):
             x = x.decode('utf-8')
-        list_of_tags.extend(get_occurance_in_text(x, pattern))
+        occurance, nr_removed_in_durrent_doc = get_occurance_in_text(x, pattern)
+        list_of_tags.extend(occurance)
+        number_of_removed += nr_removed_in_durrent_doc
 
-    return set(list_of_tags)
+    return set(list_of_tags), number_of_removed
 
 
 def clear_substr_in_texts(dataset: list, pattern=PATTERNS['html_tags'],
@@ -71,12 +74,13 @@ def clear_substr_in_texts(dataset: list, pattern=PATTERNS['html_tags'],
     """
 
     if get_info:
-        removed_sample = get_occurance_in_dataset(dataset, pattern)
+        removed_sample, number_of_removed = get_occurance_in_dataset(dataset, pattern)
         if sample:
             removed_sample = list(removed_sample)[:sample]
 
         # show what data will be removed
         print("\nREMOVED SUBSTRINGS SAMPLE:\n", removed_sample)
+        print(f"\n{number_of_removed} elements removed")
 
     return [re.sub(pattern, replace_with,
                    txt.decode('utf-8') if isinstance(txt, bytes) else txt)
