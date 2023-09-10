@@ -66,5 +66,10 @@ The basic approach is a word or n-gram frequency matrix.
 
 __________________________________________________________________________________
 
+*Bibliography:*
+
+*[1] Natural Language Processing in Action - Hobson Lane, Cole Howard, Hannes Hapke; ISBN 9781617294631*
+
+
 ***Next steps will be added soon. 
 The project is currently under construction…***
