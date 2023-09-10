@@ -2,7 +2,11 @@
 final project - "Data Science PRO" Bootcamp in Kodołamacz/Sages (https://www.kodolamacz.pl/)
 
 ## Introduction
-The aim of this project is to compare different approaches to working with text data in the case of sentiment analysis topic. In the following steps, various actions were carried out on the movie review documents contents, to bring this text data to a form from which machine learning algorithms can extract information about "sentiment" groups of these documents.
+The purpose of this project is to focus on aspects like:
+- presenting problems specific to NLP in the field of sentiment analysis
+- Preparation of text data for further analysis 
+- Comparison of some different approaches to working with text data in supervised learning in the case of sentiment analysis topic. 
+In the following steps, various actions were carried out on the movie review document contents, to bring this text data to a form from which machine learning algorithms can extract information about "sentiment" groups of these documents.
 
 The analysis of sentiment (positive vs. negative) was performed on a large dataset described briefly in the **Dataset** section.
 
@@ -62,14 +66,12 @@ Another different processing of the corpus using word unifications such as stemm
 
 The next step after clearing the data is to transform the data into a matrix (tabular). Because the machine understands numbers rather than words, we need to bring our set of documents (corpus) to this form in these tables.
 
-The basic approach is a word or n-gram frequency matrix.
+The basic approach is a word or n-gram frequency matrix. 
+
+Finally, 3 different supervised learning models will be compared. For individual variants of vectorization and model, it will be additionally checked whether the introduction of lemmatization will bring anything to the results for the examined problem.
 
 __________________________________________________________________________________
 
 *Bibliography:*
 
 *[1] Natural Language Processing in Action - Hobson Lane, Cole Howard, Hannes Hapke; ISBN 9781617294631*
-
-
-***Next steps will be added soon. 
-The project is currently under construction…***
