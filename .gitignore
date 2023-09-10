@@ -2,3 +2,4 @@
 .ipynb_checkpoints/*
 supporting_modules/.ipynb_checkpoints/*
 supporting_modules/__pycache__/*
+preprocessed_datasets/step_4/pipelines/*

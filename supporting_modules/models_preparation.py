@@ -2,6 +2,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import RandomizedSearchCV
 import seaborn as sns
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc, confusion_matrix
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
 
 
 def get_pipeline_with_best_params(corpus: list, labels: list, vectorizer, model, param_distributions: dict,
@@ -30,7 +33,7 @@ def get_pipeline_with_best_params(corpus: list, labels: list, vectorizer, model,
 
     # RandomizedSearchCV with parameter sampling
     random_search = RandomizedSearchCV(pipeline, param_distributions=param_distributions, n_iter=n_iter, cv=cv,
-                                       scoring=scoring)
+                                       scoring=scoring, n_jobs=-1, verbose=1)
     random_search.fit(corpus, labels)
 
     best_params = random_search.best_params_
@@ -47,11 +50,6 @@ def get_pipeline_with_best_params(corpus: list, labels: list, vectorizer, model,
                 ("vectorizer", vectorizer),
                 ("model", model)
             ])
-
-
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
 
 
 def evaluate_model(model, X_test, y_test):
@@ -79,8 +77,8 @@ def evaluate_model(model, X_test, y_test):
 
     # Create DataFrame
     metrics_df = pd.DataFrame({
-        'Metryka': ['accuracy', 'precision', 'recall', 'F1 Score', 'ROC AUC'],
-        'Wartość': [accuracy, precision, recall, f1, roc_auc]
+        "Metric": ['accuracy', 'precision', 'recall', 'F1 Score', 'ROC AUC'],
+        "Metric value": [accuracy, precision, recall, f1, roc_auc]
     })
 
     #  ROC curve plot
